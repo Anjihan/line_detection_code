@@ -1,0 +1,34 @@
+차선은 2가지 방식으로 검출되는데 각각 cv2.HoughLines(image, rho, theta, threshold[, lines[, srn[, stn[, min_theta[, max_theta]]]]])와 cv2.HoughLinesP(image, rho, theta, threshold, minLineLength, maxLineGap)의 함수를 사용한 결과이다. 각각의 함수의 사용법은 https://opencv-python.readthedocs.io/en/latest/doc/25.imageHoughLineTransform/imageHoughLineTransform.html 을 참고하자.
+영상에서도 알수있듯 허프변환의 단점은 명확하다. 곡선에서는 사용이 불가능하며 차선이 아닌 직선도 차선으로 인식한다는 것이다.
+
+ROS 슬라이딩 윈도우기반
+
+1. warp_src  == 주어진 영상의 원본 사다리꼴 좌표의 값을 잘 찾아서 넣어준다
+
+2. warp_dist ==  임의의 직사각형의 좌표 값을 넣어준다.
+
+3.calibrated == 자이카 카메라에 장착된 Calibration 보정값을 사용. 
+
+4. warp_image ==  M은 perspective transform 을 하는 매트릭스 , Minv 는 그 반대의 매트릭스 , warp_img 는 M의 변환이 적용이된 이미지
+
+"유튜브 영상으로 차선검출
+https://moon-coco.tistory.com/6"
+
+getPerspectiveTransform(원근법) 
+변환 행렬을 구하기 위해서는 cv2.getPerspectiveTransform() 함수가 필요하며, cv2.warpPerspective() 함수에 변환행렬값을 적용하여 최종 결과 이미지를 얻을 수 있습니다.
+
+ 차선의 폭이 너무 넓으면 곡률이 증가할 때 Sliding Window Search 오차가 심해지므로(현 알고리즘의 대표적 단점) Bird Eye View 역시 신중하게 만들어야 함
+[출처] [Python3]OpenCV 곡선 차선 인식 프로젝트 - 차선 인식(1)|작성자 큐 Queue
+
+http://www.igameplus.com/pds/OpenCV-RaspberryPi-Autonomous-Car-KIT-manual-v1_0.pdf
+
+
+
+https://codezaram.tistory.com/56 -> 자율주행자동차 팀 프로젝트 회고록 참고자료
+
+https://blog.naver.com/PostView.nhn?blogId=hirit808&logNo=221486800161&redirect=Dlog&widgetTypeCall=true&directAccess=false (곡선 차선인식 알고리즘 참고자료)
+
+-느낀점-
+도로마다 카메라 구도마다 원본 사다리꼴의 좌표가 다르기 때문에, 카메라마다 정해야된다. 
+
+
